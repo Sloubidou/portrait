@@ -15,3 +15,5 @@ git push
 commande pour garder en cache les changements mais revenir à la version du dernier pull :
 git stash 
 
+hello
+
