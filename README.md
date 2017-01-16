@@ -7,7 +7,7 @@ Commande pour ajouter un fichier au repository :
 git add fileName
 
 Commande pour commit : 
-git commit -m 'ce qui a changé'
+git commit -a -m 'ce qui a changé'
 
 commande pour push :
 git push 
