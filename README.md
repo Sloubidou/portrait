@@ -16,4 +16,5 @@ commande pour garder en cache les changements mais revenir à la version du dern
 git stash 
 
 hello
+salut!
 
