@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jan 17 12:56:14 2017
-
 @author: paulinenicolas
 """
 
@@ -103,21 +102,18 @@ def train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, Classifier):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-==============================================================================
- C = [0.01, 0.1, 1, 10]
+C = [0.01, 0.1, 1, 10]
  
  
- errors = []
+errors = []
  
- for i in range(len(C)):
+for i in range(len(C)):
      
-     clf = Classifier(C[i])
-     FeatureExtractor = FeatureExtractorClf()
-     skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
-     skf_is = list(skf.split(X_df))[0]
+    clf = Classifier(C[i])
+    FeatureExtractor = FeatureExtractorClf()
+    skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
+    skf_is = list(skf.split(X_df))[0]
  
-     errors.append(train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, clf))
+    errors.append(train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, clf))
      
- print(errors)
-==============================================================================
-
+print(errors)
