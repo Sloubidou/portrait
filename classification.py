@@ -32,8 +32,11 @@ class FeatureExtractorClf(object):
     def transform(self, X_df, y_df):
         
         #selecting only features that are interesting for the prdiction (i.e impact feature)
-        XX = X_df[['ID', 'sharpness_impact_p', 'sharpness_impact_n', 'background_impact_p', 'background_impact_n']]
+        XX = X_df.copy()
+        XX = XX[['ID', 'sharpness_impact_p', 'sharpness_impact_n', 'background_impact_p', 'background_impact_n', 
+                 'exposure_impact_p', 'exposure_impact_n', 'angle_impact_p', 'angle_impact_n', 'landmarks confidence', 'expression impact_p', 'expression_impact_n']]
         XX = XX.set_index(['ID'])
+        #XX = XX.select_dtypes(include=['float64', 'int'])
         XX = np.array(XX)
         
         #Transforming the actual target into a binary target
@@ -50,13 +53,19 @@ class FeatureExtractorClf(object):
 #Fitting model function (SVM)
 from sklearn.svm import SVC
 from sklearn.base import BaseEstimator
+from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
 
 
 class Classifier(BaseEstimator):
     def __init__(self, C):
         self.C = C
+        #self.n_components = 20
+        #self.clf = Pipeline([('pca', PCA(n_components=self.n_components)), 
+        #                     ('clf', SVC(C = self.C, probability = True))])
         self.clf = SVC(C = self.C, probability = True)
 
+        
     def fit(self, X, y):
         self.clf.fit(X, y)
 
@@ -102,7 +111,7 @@ def train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, Classifier):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-C = [0.01, 0.1, 1, 10]
+C = [0.001, 0.01, 0.1, 1, 10, 100]
  
  
 errors = []
