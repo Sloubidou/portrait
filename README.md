@@ -1,5 +1,3 @@
-TEST DOM
-
 # portrait
 DataChallenge Portrait ML
 
