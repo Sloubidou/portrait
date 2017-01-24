@@ -81,8 +81,8 @@ from scipy.stats import rankdata
 def spearman_error(y_true, y_pred):
     y_true_rank = rankdata(y_true)
     y_pred_rank = rankdata(y_pred)
-    distance = np.dot((y_pred_rank - y_true_rank).T, (y_pred_rank - y_true_rank))
-    accuracy = 1 - 6*distance/(y_pred_rank.shape[0]*(y_pred_rank.shape[0]**2 - 1))
+    square_distance = np.dot((y_pred_rank - y_true_rank).T, (y_pred_rank - y_true_rank))
+    accuracy = 1 - 6*square_distance/(y_pred_rank.shape[0]*(y_pred_rank.shape[0]**2 - 1))
     
     return accuracy
     
@@ -139,4 +139,7 @@ for i in range(len(C)):
      
 print(accuracies)
 
+
+for i in range(X_df.columns.values.shape[0]):
+    print(X_df.columns.values[i])
 
