@@ -11,7 +11,7 @@ import glob
 import os
 import pandas as pd
 from quality_features import blurry
-from spatial_features import dist_rule_thirds, get_face_center
+from spatial_features import dist_rule_thirds, get_face_center,face_ratio
 
 #popo
 pathname = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/*.jpg"
@@ -24,7 +24,8 @@ data = pd.read_csv(path_data, nrows=20)
 #adding our features to a global dataframe with the picture id
 df = pd.DataFrame(columns=('ID', 'blur'
                             ,'d_p1','d_p2','d_p3','d_p4'
-                            ,'d_l1','d_l2','d_l3', 'd_l4'))
+                            ,'d_l1','d_l2','d_l3', 'd_l4'
+                            , 'face_ratio'))
 
 i = 0
 for img in glob.glob(pathname):
@@ -43,6 +44,7 @@ for img in glob.glob(pathname):
     #Filling the df line by line
     df.loc[i] = [os.path.splitext(os.path.basename(img))[0]
                 , blurry(image)
-                , drt[0], drt[1],drt[2],drt[3],drt[4],drt[5],drt[6],drt[7]]
+                , drt[0], drt[1],drt[2],drt[3],drt[4],drt[5],drt[6],drt[7]
+                , face_ratio(data['width'].ix[idx-1], data['height'].ix[idx-1])]
     i+=1
 

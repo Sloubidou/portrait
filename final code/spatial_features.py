@@ -46,3 +46,10 @@ def dist_rule_thirds(width_im, height_im, x_c, y_c):
     dist_l4 = norm(((2*width_im/3-y_c)))/hw # horizontal 2
     
     return (dist_1, dist_2, dist_3, dist_4, dist_l1,dist_l2,dist_l3,dist_l4)
+
+def face_ratio(width_f, height_f):
+    """
+    Ratio of face to image: Approx number of pixels of the face to that in the background
+    """
+    ratio = width_f * height_f
+    return ratio
