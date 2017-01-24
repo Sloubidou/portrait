@@ -22,20 +22,24 @@ path_data = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Proj
 data = pd.read_csv(path_data, nrows=20)
 
 #adding our features to a global dataframe with the picture id
-df = pd.DataFrame(columns=('ID', 'blur'))
+df = pd.DataFrame(columns=('ID', 'blur'
+                            ,'d_p1','d_p2','d_p3','d_p4'
+                            ,'d_l1','d_l2','d_l3', 'd_l4'))
 
 i = 0
 for img in glob.glob(pathname):
     
     #Read the image
     image = cv2.imread(img)
-    idx = os.path.splitext(os.path.basename(img))[0]
+    idx = int(os.path.splitext(os.path.basename(img))[0])
     
-    #saptial features
+    #get saptial features
     a,b = get_face_center(image.shape[1], image.shape[0]
                         , data['x0'].ix[idx-1], data['width'].ix[idx-1]
                         , data['y0'].ix[idx-1], data['height'].ix[idx-1])
+                        
     drt = dist_rule_thirds(image.shape[1], image.shape[0], a,b)
+    
     #Filling the df line by line
     df.loc[i] = [os.path.splitext(os.path.basename(img))[0]
                 , blurry(image)
