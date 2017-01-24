@@ -7,7 +7,6 @@ Created on Tue Jan 24 11:37:06 2017
 """
 
 import cv2
-##test
 
 
 #### Contrast function #####
