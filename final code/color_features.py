@@ -25,7 +25,9 @@ def brightness( im ):
     b,g,r = np.mean(im, axis=(0,1))
     return math.sqrt(0.241*(r**2) + 0.691*(g**2) + 0.068*(b**2))
     
-    
+def hsv_im(im,ID_im ):
+    hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+    h,s,v = np.mean(hsv, axis=(0,1))    
     
 def hsv_face(im,ID_im ):
     i=df.loc[df['ID']==ID_im].index[0]
