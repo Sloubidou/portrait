@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jan 24 11:37:06 2017
@@ -64,16 +64,16 @@ def V_back_fore_diff(im,ID_im):
     
 im=cv2.imread(image_br)
 im2=cv2.imread(image_nbr) 
-print brightness(im),brightness(im2)
+print (brightness(im),brightness(im2))
 
 ID_im = 267
 im=cv2.imread(image_nbr)
-print hsv_background(im,ID_im),hsv_face(im,ID_im)
+print (hsv_background(im,ID_im),hsv_face(im,ID_im))
 
 ID_im = 109
 im=cv2.imread(image_br)
-print hsv_background(im,ID_im),hsv_face(im,ID_im)
+print (hsv_background(im,ID_im),hsv_face(im,ID_im))
 
-print V_back_fore_diff(im,ID_im)
+print (V_back_fore_diff(im,ID_im))
 #### Contrast function #####
 #### Clor Function
