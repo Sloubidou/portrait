@@ -20,6 +20,7 @@ df_score = pd.read_csv(pathname2, sep = ';')
 
 image_br= "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/109.jpg"
 image_nbr= "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/267.jpg"
+image_24= "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/6305.jpg"
 
 def brightness( im ):
     b,g,r = np.mean(im, axis=(0,1))
@@ -27,7 +28,9 @@ def brightness( im ):
     
 def hsv_im(im,ID_im ):
     hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
-    h,s,v = np.mean(hsv, axis=(0,1))    
+    h_m,s_m,v_m = np.mean(hsv, axis=(0,1))
+    h_std,s_std,v_std = np.std(hsv, axis=(0,1)) 
+    return h_m,s_m,v_m ,h_std,s_std,v_std
     
 def hsv_face(im,ID_im ):
     i=df.loc[df['ID']==ID_im].index[0]
@@ -38,8 +41,9 @@ def hsv_face(im,ID_im ):
 
     face_im = im[y_0:y_1, x_0:x_1] #image cropped around the face
     hsv_face = cv2.cvtColor(face_im, cv2.COLOR_BGR2HSV)
-    h,s,v = np.mean(hsv_face, axis=(0,1))
-    return h, s, v
+    h_m,s_m,v_m = np.mean(hsv_face, axis=(0,1))
+    h_std,s_std,v_std = np.std(hsv_face, axis=(0,1))
+    return h_m,s_m,v_m ,h_std,s_std,v_std
     
 def hsv_background(im,ID_im):
     i=df.loc[df['ID']==ID_im].index[0]
@@ -51,16 +55,15 @@ def hsv_background(im,ID_im):
     backg_im2 = im[y_0:y_1 , x_1:]
     backg_im3 = im[y_1: , :]
     backg_im4 = im[:y_0 , :]#image cropped around the face
-    hsv_backg1= cv2.cvtColor(backg_im1 , cv2.COLOR_BGR2HSV)
-    hsv_backg2= cv2.cvtColor(backg_im2 , cv2.COLOR_BGR2HSV)
-    hsv_backg3= cv2.cvtColor(backg_im3 , cv2.COLOR_BGR2HSV)
-    hsv_backg4= cv2.cvtColor(backg_im4 , cv2.COLOR_BGR2HSV)
-    h,s,v = np.sum(hsv_backg1, axis=(0,1))+np.sum(hsv_backg2, axis=(0,1))+np.sum(hsv_backg3, axis=(0,1))+np.sum(hsv_backg4, axis=(0,1))
-    pix_tot = backg_im1.shape[0]*backg_im1.shape[1]+backg_im2.shape[0]*backg_im2.shape[1]+backg_im3.shape[0]*backg_im3.shape[1]+backg_im4.shape[0]*backg_im4.shape[1]
-    return h/pix_tot, s/pix_tot, v/pix_tot 
+    h_backg= np.concatenate((cv2.cvtColor(backg_im1 , cv2.COLOR_BGR2HSV)[:,:,0].ravel(),cv2.cvtColor(backg_im2 , cv2.COLOR_BGR2HSV)[:,:,0].ravel(),cv2.cvtColor(backg_im3 , cv2.COLOR_BGR2HSV)[:,:,0].ravel(),cv2.cvtColor(backg_im4 , cv2.COLOR_BGR2HSV)[:,:,0].ravel()),axis=0)
+    s_backg= np.concatenate((cv2.cvtColor(backg_im1 , cv2.COLOR_BGR2HSV)[:,:,1].ravel(),cv2.cvtColor(backg_im2 , cv2.COLOR_BGR2HSV)[:,:,1].ravel(),cv2.cvtColor(backg_im3 , cv2.COLOR_BGR2HSV)[:,:,1].ravel(),cv2.cvtColor(backg_im4 , cv2.COLOR_BGR2HSV)[:,:,1].ravel()),axis=0)
+    v_backg= np.concatenate((cv2.cvtColor(backg_im1 , cv2.COLOR_BGR2HSV)[:,:,2].ravel(),cv2.cvtColor(backg_im2 , cv2.COLOR_BGR2HSV)[:,:,2].ravel(),cv2.cvtColor(backg_im3 , cv2.COLOR_BGR2HSV)[:,:,2].ravel(),cv2.cvtColor(backg_im4 , cv2.COLOR_BGR2HSV)[:,:,2].ravel()),axis=0)    
+    h_m,s_m,v_m = np.mean(h_backg),np.mean(s_backg),np.mean(v_backg)
+    h_std,s_std,v_std = np.std(h_backg),np.std(s_backg),np.std(v_backg)
+    return h_m,s_m,v_m ,h_std,s_std,v_std
     
-def V_back_fore_diff(im,ID_im):
-    return abs(hsv_face(im,ID_im )[0] - hsv_background(im,ID_im)[0])
+#def V_back_fore_diff(im,ID_im):
+#    return abs(hsv_face(im,ID_im )[2] - hsv_background(im,ID_im)[2])
     
 im=cv2.imread(image_br)
 im2=cv2.imread(image_nbr) 
@@ -68,12 +71,15 @@ print brightness(im),brightness(im2)
 
 ID_im = 267
 im=cv2.imread(image_nbr)
-print hsv_background(im,ID_im),hsv_face(im,ID_im)
+#print hsv_background(im,ID_im),hsv_face(im,ID_im)
 
 ID_im = 109
 im=cv2.imread(image_br)
-print hsv_background(im,ID_im),hsv_face(im,ID_im)
+#print hsv_background(im,ID_im),hsv_face(im,ID_im)
 
-print V_back_fore_diff(im,ID_im)
+ID_im = 6305
+im=cv2.imread(image_24)
+print hsv_background(im,ID_im),hsv_face(im,ID_im)
+#print V_back_fore_diff(im,ID_im)
 #### Contrast function #####
 #### Clor Function
