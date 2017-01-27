@@ -80,6 +80,7 @@ for img in glob.glob(pathname):
                 #, hsv_background[0], hsv_background[1], hsv_background[2], hsv_background[3], hsv_background[4], hsv_background[5]]
                 ]
     i+=1
+    print(i)
 
 #Split data
 #X_train, X_test, y_train, y_test = train_test_split(x_selection_position, y_position_impact, train_size=0.8, random_state=0)
