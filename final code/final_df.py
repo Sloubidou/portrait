@@ -86,7 +86,6 @@ for img in glob.glob(pathname):
     print(i)
 
 #Split data
-#X_train, X_test, y_train, y_test = train_test_split(x_selection_position, y_position_impact, train_size=0.8, random_state=0)
 X_train, X_test, y_train, y_test = train_test_split(df, result['TARGET'], train_size=0.8, random_state=0)
 print("Nb d'échantillons d'apprentissage :  {}".format(X_train.shape[0]))
 print("Nb d'échantillons de validation :    {}".format(X_test.shape[0]))
