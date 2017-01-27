@@ -22,17 +22,21 @@ import color_features as cf
 
 
 #popo
-pathname = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/*.jpg"
+#pathname = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/*.jpg"
 #dom
-pathname = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/pictures_test/*.jpg'
-path_data = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/facial_features_train.csv'
+#pathname = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/pictures_test/*.jpg'
+#path_data = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/facial_features_train.csv'
+#estelle
+pathname="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_dentrees_dentrainement_predire_le_score_esthetique_dun_portrait/pictures_train/*.jpg"
+pathresult = "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_de_sortie_dentrainement_predire_le_score_esthetique_dun_portrait.csv"
+path_data = "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_dentrees_dentrainement_predire_le_score_esthetique_dun_portrait/facial_features_train.csv"
 
 #slou
-pathname = '/home/slou/Documents/M2/semestre1/ML_project/pictures_train/*.jpg'
-pathresult = '/home/slou/Documents/M2/semestre1/ML_project/output_train.csv'
-path_data = '/home/slou/Documents/M2/semestre1/ML_project/facial_features_train.csv'
+#pathname = '/home/slou/Documents/M2/semestre1/ML_project/pictures_train/*.jpg'
+#pathresult = '/home/slou/Documents/M2/semestre1/ML_project/output_train.csv'
+#path_data = '/home/slou/Documents/M2/semestre1/ML_project/facial_features_train.csv'
 
-data = pd.read_csv(path_data)
+data = pd.read_csv(path_data,sep = ',')
 result = pd.read_csv(pathresult, sep =";")
 
 #adding our features to a global dataframe with the picture id
