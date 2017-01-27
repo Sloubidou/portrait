@@ -17,8 +17,8 @@ from math import hypot
 def get_face_center(x_0, width_f, y_0, height_f):
     'x_0, width_f, y_0, height_f in percentage'
     
-    x_c = int(x_0 + width_f/2)
-    y_c = int(y_0 + height_f/2)
+    x_c = x_0 + width_f/2
+    y_c = y_0 + height_f/2
     return (x_c, y_c) 
 
 def dist_rule_thirds(x_c, y_c):     

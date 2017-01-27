@@ -27,14 +27,14 @@ import color_features as cf
 #pathname = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/pictures_test/*.jpg'
 #path_data = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/facial_features_train.csv'
 #estelle
-pathname="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_dentrees_dentrainement_predire_le_score_esthetique_dun_portrait/pictures_train/*.jpg"
-pathresult = "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_de_sortie_dentrainement_predire_le_score_esthetique_dun_portrait.csv"
-path_data = "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_dentrees_dentrainement_predire_le_score_esthetique_dun_portrait/facial_features_train.csv"
+#pathname="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_dentrees_dentrainement_predire_le_score_esthetique_dun_portrait/pictures_train/*.jpg"
+#pathresult = "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_de_sortie_dentrainement_predire_le_score_esthetique_dun_portrait.csv"
+#path_data = "/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_dentrees_dentrainement_predire_le_score_esthetique_dun_portrait/facial_features_train.csv"
 
 #slou
-#pathname = '/home/slou/Documents/M2/semestre1/ML_project/pictures_train/*.jpg'
-#pathresult = '/home/slou/Documents/M2/semestre1/ML_project/output_train.csv'
-#path_data = '/home/slou/Documents/M2/semestre1/ML_project/facial_features_train.csv'
+pathname = '/home/slou/Documents/M2/semestre1/ML_project/pictures_train/*.jpg'
+pathresult = '/home/slou/Documents/M2/semestre1/ML_project/output_train.csv'
+path_data = '/home/slou/Documents/M2/semestre1/ML_project/facial_features_train.csv'
 
 data = pd.read_csv(path_data,sep = ',')
 result = pd.read_csv(pathresult, sep =";")

@@ -32,7 +32,6 @@ def blurry_face(im,x0, y0, width, height ):
     y_0 =int(y0*im.shape[0])
     x_1 = int((x0+width)*im.shape[1])
     y_1 = int((y0+height)*im.shape[0])
-
     face_im = im[y_0:y_1, x_0:x_1] #image cropped around the face
 
     gray = cv2.cvtColor(face_im, cv2.COLOR_BGR2GRAY)
