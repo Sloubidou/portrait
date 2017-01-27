@@ -70,7 +70,7 @@ for img in glob.glob(pathname):
     #hsv_background = cf.hsv_background(image,data['x0'].ix[idx-1], data['y0'].ix[idx-1], data['width'].ix[idx-1], data['height'].ix[idx-1])
     
     #get quality features
-    blurr = qf.blurry(image)
+    blurr = qf.blurry_tot(image)
     
     #Filling the df line by line
     df.loc[i] = [os.path.splitext(os.path.basename(img))[0]
