@@ -44,7 +44,7 @@ def hsv_face(im,x0, y0, width, height ):
     h_std,s_std,v_std = np.std(hsv_face, axis=(0,1))
     return (h_m,s_m,v_m ,h_std,s_std,v_std)
     
-<<<<<<< HEAD
+
 def hsv_background(im,x0, y0, width, height ):
     x_0 =int(x0*im.shape[1])
     y_0 =int(y0*im.shape[0])
@@ -71,21 +71,21 @@ def hsv_background(im,x0, y0, width, height ):
 
 #ID_im = 267
 #im=cv2.imread(image_nbr)
-im=cv2.imread(image_br)
-im2=cv2.imread(image_nbr) 
-print (brightness(im),brightness(im2))
+#im=cv2.imread(image_br)
+#im2=cv2.imread(image_nbr) 
+#print (brightness(im),brightness(im2))
 
-ID_im = 267
-im=cv2.imread(image_nbr)
-print (hsv_background(im,ID_im),hsv_face(im,ID_im))
+#ID_im = 267
+#im=cv2.imread(image_nbr)
+#print (hsv_background(im,ID_im),hsv_face(im,ID_im))
 
 
-image_br= "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/1031.jpg"
-ID_im = 1031
-im=cv2.imread(image_br)
-print (hsv_background(im,ID_im),hsv_face(im,ID_im))
+#image_br= "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/1031.jpg"
+#ID_im = 1031
+#im=cv2.imread(image_br)
+#print (hsv_background(im,ID_im),hsv_face(im,ID_im))
 
-print (V_back_fore_diff(im,ID_im))
+#print (V_back_fore_diff(im,ID_im))
 #print hsv_background(im,ID_im),hsv_face(im,ID_im)
 
 #ID_im = 109
