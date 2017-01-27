@@ -44,7 +44,7 @@ df = pd.DataFrame(columns=('ID', 'blur'
                             , 'brightness'
                             , 'hsv_im_h_m','hsv_im_s_m','hsv_im_v_m','hsv_im_h_std', 'hsv_im_s_std', 'hsv_im_v_std'
                             , 'hsv_face_h_m','hsv_face_s_m', 'hsv_face_v_m' ,'hsv_face_h_std', 'hsv_face_s_std', 'hsv_face_v_std'
-                            ))#, 'hsv_back_h_m', 'hsv_back_s_m', 'hsv_back_v_m', 'hsv_back_h_std', 'hsv_back_s_std', 'hsv_back_v_std'))
+                            , 'hsv_back_h_m', 'hsv_back_s_m', 'hsv_back_v_m', 'hsv_back_h_std', 'hsv_back_s_std', 'hsv_back_v_std'))
 
 i = 0
 for img in glob.glob(pathname):
@@ -63,10 +63,10 @@ for img in glob.glob(pathname):
     brightness = cf.brightness(image)   
     hsv_im = cf.hsv_im(image)  
     hsv_face = cf.hsv_face(image,data['x0'].ix[idx-1], data['y0'].ix[idx-1], data['width'].ix[idx-1], data['height'].ix[idx-1])
-    #hsv_background = cf.hsv_background(image,data['x0'].ix[idx-1], data['y0'].ix[idx-1], data['width'].ix[idx-1], data['height'].ix[idx-1])
+    hsv_background = cf.hsv_background(image,data['x0'].ix[idx-1], data['y0'].ix[idx-1], data['width'].ix[idx-1], data['height'].ix[idx-1])
     
     #get quality features
-    blurr = qf.blurry(image)
+    blurr = qf.blurry_tot(image)
     
     #Filling the df line by line
     df.loc[i] = [os.path.splitext(os.path.basename(img))[0]
@@ -77,8 +77,7 @@ for img in glob.glob(pathname):
                 , brightness
                 , hsv_im[0], hsv_im[1], hsv_im[2], hsv_im[3], hsv_im[4], hsv_im[5]
                 , hsv_face[0], hsv_face[1], hsv_face[2], hsv_face[3], hsv_face[4], hsv_face[5]
-                #, hsv_background[0], hsv_background[1], hsv_background[2], hsv_background[3], hsv_background[4], hsv_background[5]]
-                ]
+                , hsv_background[0], hsv_background[1], hsv_background[2], hsv_background[3], hsv_background[4], hsv_background[5]]
     i+=1
 
 #Split data
@@ -98,3 +97,5 @@ y_pred = svr_rbf.predict(X_test)
 print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
 print(y_pred[:10])
 print(np.std(y_pred))
+
+df.to_csv('/home/slou/Documents/M2/semestre1/ML_project/test.csv')
