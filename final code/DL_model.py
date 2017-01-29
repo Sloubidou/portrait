@@ -20,9 +20,6 @@ im_test="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learn
 
 im=cv2.imread(im_test)
 im = cv2.resize(im, (224, 224)).astype(np.float32)
-im[:,:,0] -= 103.939
-im[:,:,1] -= 116.779
-im[:,:,2] -= 123.68
 #im = im.transpose((2,0,1))
 im = np.expand_dims(im, axis=0)
 model = VGG16(weights="imagenet")
@@ -35,10 +32,6 @@ i=0
 for img in glob.glob(pathname):
     im=cv2.imread(im_test)
     im = cv2.resize(im, (224, 224)).astype(np.float32)
-    im[:,:,0] -= 103.939
-    im[:,:,1] -= 116.779
-    im[:,:,2] -= 123.68
-
 #im = im.transpose((2,0,1))
     im = np.expand_dims(im, axis=0)
     model = VGG16(weights="imagenet")
@@ -48,7 +41,9 @@ for img in glob.glob(pathname):
     feat=np.concatenate((out, out_old), axis=0)
     out_old=feat
     i=i+1
-    if i>20:
+    if i%10==0:
+        print i
+    if i>500:
         break
 
 X_train, X_test, y_train, y_test = train_test_split(feat, result['TARGET'][:feat.shape[0]], train_size=0.8, random_state=0)
