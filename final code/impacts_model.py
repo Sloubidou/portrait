@@ -7,6 +7,7 @@ Created on Fri Jan 27 13:53:39 2017
 """
 from sklearn.svm import SVR
 from sklearn.cross_validation import train_test_split
+import pandas as pd
 
 def position_impact(x_selection_position, y_position_impact):
     print("Calcul de position_impact :")
@@ -24,3 +25,4 @@ def position_impact(x_selection_position, y_position_impact):
     print("Accuracy       : ", mean_squared_error(y_test, y_pred))
     return y_pred
     
+
