@@ -65,35 +65,53 @@ def train_model(model, train, test, nb_classes):
 # the data, shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-# create two datasets one with digits below 5 and one with 5 and above
-X_train_lt5 = X_train[y_train < 5]
-y_train_lt5 = y_train[y_train < 5]
-X_test_lt5 = X_test[y_test < 5]
-y_test_lt5 = y_test[y_test < 5]
-
-X_train_gte5 = X_train[y_train >= 5]
-y_train_gte5 = y_train[y_train >= 5] - 5  # make classes start at 0 for
-X_test_gte5 = X_test[y_test >= 5]         # np_utils.to_categorical
-y_test_gte5 = y_test[y_test >= 5] - 5
 
 # define two groups of layers: feature (convolutions) and classification (dense)
 feature_layers = [
-    Convolution2D(nb_filters, kernel_size, kernel_size,
-                  border_mode='valid',
-                  input_shape=input_shape),
-    Activation('relu'),
-    Convolution2D(nb_filters, kernel_size, kernel_size),
-    Activation('relu'),
-    MaxPooling2D(pool_size=(pool_size, pool_size)),
-    Dropout(0.25),
-    Flatten(),
+    ZeroPadding2D((1,1),input_shape=(3,224,224))
+    Convolution2D(64, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(64, 3, 3, activation='relu')
+    MaxPooling2D((2,2), strides=(2,2)))
+
+    ZeroPadding2D((1,1))
+    Convolution2D(128, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(128, 3, 3, activation='relu')
+    MaxPooling2D((2,2), strides=(2,2))
+
+    ZeroPadding2D((1,1))
+    Convolution2D(256, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(256, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(256, 3, 3, activation='relu')
+    MaxPooling2D((2,2), strides=(2,2))
+
+    ZeroPadding2D((1,1))
+    Convolution2D(512, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(512, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(512, 3, 3, activation='relu')
+    MaxPooling2D((2,2), strides=(2,2))
+
+    ZeroPadding2D((1,1))
+    Convolution2D(512, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(512, 3, 3, activation='relu')
+    ZeroPadding2D((1,1))
+    Convolution2D(512, 3, 3, activation='relu')
+    MaxPooling2D((2,2), strides=(2,2))
+
+    Flatten()
 ]
 classification_layers = [
-    Dense(128),
-    Activation('relu'), 
-    Dropout(0.5),
-    Dense(nb_classes),
-    Activation('softmax')
+    Dense(4096, activation='relu')
+    Dropout(0.5)
+    Dense(4096, activation='relu')
+    Dropout(0.5)
+    Dense(24, activation='softmax')
 ]
 
 # create complete model
