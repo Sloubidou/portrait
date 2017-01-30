@@ -26,7 +26,7 @@ def dist_rule_thirds(x_c, y_c):
     x_c, y_c position of the center of the face in %
     """
     top_third = 1/3
-    bot_third = 1/3
+    bot_third = 2/3
     '''distance between the face center & the 4 points (rule of thirds)'''
     dist_1 = hypot((top_third - y_c),(top_third - x_c))
     dist_2 = hypot((top_third - y_c),(bot_third - x_c))
