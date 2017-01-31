@@ -13,31 +13,78 @@ from sklearn import preprocessing
 
 """ Getting the data  """
 
-path_fft = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/facial_features_train.csv'
-path_dataframe = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframe.csv'
+path_train = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/facial_features_train.csv'
+path_test = ''
+path_dataframe_train = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframe.csv'
+path_dataframe_test = ''
 
+#Facial Features
+df_train = pd.read_csv(path_train)
+df_test = pd.read_csv(path_test)
+
+#Extracted Features
+df_extract_train = pd.read_csv(path_dataframe_train)
+df_extract_train = df_extract_train.sort('ID')
+
+df_extract_test = pd.read_csv(path_dataframe_test)
+df_extract_test = df_extract_test.sort('ID')
 
 "expression impact"
-df = pd.read_csv(path_fft)
 
-reg_exp_p, a,b = mi.expression_p_svr(df)
-reg_exp_n, a,b = mi.expression_n_svr(df)
+X_test = np.array(df_test[df_test.columns[6:75].append(df_test.columns[84:94])])
+
+# Positive
+reg_exp_p, a,b = mi.expression_p_svr(df_train)
+y_pred_exp_p = reg_exp_p.predict(X_test)
+
+#Negative
+reg_exp_n, a,b = mi.expression_n_svr(df_train)
+y_pred_exp_n = reg_exp_n.predict(X_test)
 
 "sharpness impact"
-df_extract = pd.read_csv(path_dataframe)
-df_extract = df_extract.sort('ID')
 
-X_scale = preprocessing.scale(
+X_scale_train = preprocessing.scale(
                 np.array(
-                    df_extract[df_extract.columns[3:5]
-                            .append(df_extract.columns[13:14])
-                            .append(df_extract.columns[18:20])
-                            .append(df_extract.columns[21:29])]))
+                    df_extract_train[df_extract_train.columns[3:5]
+                            .append(df_extract_train.columns[13:14])
+                            .append(df_extract_train.columns[18:20])
+                            .append(df_extract_train.columns[21:29])]))
 
-Y_p = np.array(df['sharpness_impact_p'])
-reg_sharp_p, a,b = mi.sharpness_svr(X_scale, Y_p)
+X_scale_test = preprocessing.scale(
+                np.array(
+                    df_extract_test[df_extract_test.columns[3:5]
+                            .append(df_extract_test.columns[13:14])
+                            .append(df_extract_test.columns[18:20])
+                            .append(df_extract_test.columns[21:29])]))
+#Positive
+Y_p_train = np.array(df_train['sharpness_impact_p'])
+reg_sharp_p, a,b = mi.sharpness_svr(X_scale_train, Y_p_train)
+y_pred_sharp_p = reg_sharp_p.predict(X_scale_test)
 
-Y_n = np.array(df['sharpness_impact_n'])
-reg_sharp_n, a,b = mi.sharpness_svr(X_scale, Y_n)
+#Negative
+Y_n_train = np.array(df_train['sharpness_impact_n'])
+reg_sharp_n, a,b = mi.sharpness_svr(X_scale_train, Y_n_train)
+y_pred_sharp_n = reg_sharp_n.predict(X_scale_test)
+
+"background impact"
+
+X_scale_train = preprocessing.scale(
+                np.array(
+                    df_extract_train[df_extract_train.columns[2:]]))
+
+X_scale_test = preprocessing.scale(
+                np.array(
+                    df_extract_test[df_extract_test.columns[2:]]))
+
+#Positive
+Y_p_train = np.array(df_train['background_impact_p'])
+reg_back_p, a,b = mi.background(X_scale_train, Y_p_train)
+y_pred_back_p = reg_back_p.predict(X_scale_test)
+
+#Negative
+Y_n_train = np.array(df_train['background_impact_n'])
+reg_back_n, a,b = mi.background(X_scale_train, Y_n_train)
+y_pred_back_n = reg_back_n.predict(X_scale_test)
+
 
 

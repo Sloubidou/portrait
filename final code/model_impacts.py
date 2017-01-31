@@ -153,6 +153,25 @@ def sharpness_svr(X_scale, Y):
     y_pred = reg.predict(X_test)
     print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
     return reg, y_pred, y_test
+ 
+    
+""" 
+Background Impact 
+""" 
+    
+def background(X_scale, Y):
+    X_train, X_test, y_train, y_test = train_test_split(X_scale, Y, train_size=0.8, random_state=0)
+    
+    reg = SVR(kernel='rbf', C=0.8, gamma=0.1)
+
+    reg.fit(X_train, y_train)
+
+    #Prediction
+    y_pred = reg.predict(X_test)
+    print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
+  
+    
+    return reg, y_pred, y_test
 
 
 
