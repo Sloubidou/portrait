@@ -5,9 +5,14 @@ Created on Fri Jan 27 13:53:39 2017
 
 @author: domitillecoulomb
 """
-from sklearn.svm import SVR
-from sklearn.cross_validation import train_test_split
+import numpy as np
 import pandas as pd
+#from sklearn import preprocessing
+from sklearn.cross_validation import train_test_split
+from sklearn.svm import SVR, SVC
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
 
 """ Position Impact """
 
@@ -27,9 +32,11 @@ def position_impact(x_selection_position, y_position_impact):
     print("Accuracy       : ", mean_squared_error(y_test, y_pred))
     return y_pred
 
-""" Expression Impact """ 
+"""
+Regression Model for expression impacts
+"""
 
-def expression_svr(df): 
+def expression_p_svr(df): 
     
     "SVR - Best Result"
     
@@ -44,7 +51,57 @@ def expression_svr(df):
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
     return y_pred, y_test
 
-def expression_svc(df):
+def expression_p_linear(df): 
+    
+    "SVR - Best Result"
+    
+    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression impact_p'], train_size=0.8, random_state=0)
+    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
+
+    reg = LinearRegression()
+    reg.fit(X_train, y_train)
+
+    #Prediction
+    y_pred = reg.predict(X_test)
+    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
+    return y_pred, y_test
+    
+def expression_n_svr(df): 
+    
+    "SVR - Best Result"
+    
+    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression_impact_n'], train_size=0.8, random_state=0)
+    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
+
+    reg = SVR(kernel='poly', C=0.8, gamma=0.1)
+    reg.fit(X_train, y_train)
+
+    #Prediction
+    y_pred = reg.predict(X_test)
+    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
+    return y_pred, y_test
+
+def expression_n_linear(df): 
+    
+    "SVR - Best Result"
+    
+    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression_impact_n'], train_size=0.8, random_state=0)
+    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
+
+    reg = LinearRegression()
+    reg.fit(X_train, y_train)
+
+    #Prediction
+    y_pred = reg.predict(X_test)
+    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
+    return y_pred, y_test
+    
+"""
+Classification Model for expression impacts
+"""
+
+
+def expression_p_svc(df):
     
     "SVC"
     
@@ -66,5 +123,36 @@ def expression_svc(df):
     y_test_clf = pd.DataFrame(y_test).replace(labels, classes)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test_clf), np.array(y_pred_clf)))
     return y_pred, y_test
+
+""" 
+Sharpness Impact 
+"""
+
+#df_extract = pd.read_csv(path_dataframe)
+#df_extract = df_extract.sort('ID')
+
+#X_scale = preprocessing.scale(
+#                np.array(
+#                    df_extract[df_extract.columns[3:5]
+#                            .append(df_extract.columns[13:14])
+#                            .append(df_extract.columns[18:20])
+#                            .append(df_extract.columns[21:29])]))
+
+#Y_p = np.array(df['sharpness_impact_p'])
+#Y_n = np.array(df['sharpness_impact_n'])
+
+def sharpness_svr(X_scale, Y):
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_scale, Y, train_size=0.8, random_state=0)
+    
+    #reg = SVR(kernel='rbf', C=0.8, gamma=0.1)
+    reg = LinearRegression()
+    reg.fit(X_train, y_train)
+
+    #Prediction
+    y_pred = reg.predict(X_test)
+    print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
+    return y_pred, y_test
+
 
 
