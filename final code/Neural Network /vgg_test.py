@@ -17,7 +17,7 @@ from keras.optimizers import SGD
 import cv2, numpy as np
 import glob
 import pandas as pd
-nb_classes = 24
+nb_classes = 25
 
 def vgg_face(weights_path=None):
     img = Input(shape=(3, 224, 224))
@@ -75,7 +75,7 @@ def vgg_face(weights_path=None):
     return model
 
 
-model = vgg_face('/Users/paulinenicolas/portrait/exploring_work/Deep/mymodel_500pic_2epoch.h5')
+model = vgg_face('/Users/paulinenicolas/downloads/mymodel_4000pic_3epoch.h5')
 
 
 ###Building matrix of features###
