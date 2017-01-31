@@ -173,6 +173,6 @@ y_pred2 = y_pred2.T
 df_pred = pd.DataFrame(y_pred2, columns=['ID','TARGET'])
 
 #path where to save your csv file
-df_pred.to_csv('./dataframes/target_test_svm.csv', sep=';', index = False)
-print("Done, target file saved in ./dataframes/target_test_svm.csv")
+df_pred.to_csv('./dataframes/submission_reg_features.csv', sep=';', index = False)
+print("Done, target file saved in ./dataframes/submission_reg_features.csv")
 

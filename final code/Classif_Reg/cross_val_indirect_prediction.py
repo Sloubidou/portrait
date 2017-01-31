@@ -19,8 +19,8 @@ from sklearn import preprocessing
 
 
 
-pathname1 = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/essai_impact_train.csv"
-pathname2 = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+pathname1 = "./dataframes/essai_impact_train.csv"
+pathname2 = "./dataframes/output_train.csv"
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
 X_df = X_df.sort('ID')
@@ -135,7 +135,7 @@ def spearman_error(y_true, y_pred):
 #Cross Validation in order to find  the value of C which predict the best   
 C = [1]
  
- 
+print("Cross Validation on SVR..")
 accuracies = []
  
 for i in range(len(C)):
@@ -151,9 +151,10 @@ print(accuracies)
 
 ###True prediction a la fin du fichier de cross val
 
+print("Calculating target for testing set for SVR with C=10..")
 #path until feature matrix of testing set
 
-pathname_result = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/essai_impact_test.csv"
+pathname_result = "./dataframes/essai_impact_test.csv"
 X_test_df = pd.read_csv(pathname_result, sep = ',')
 X_test = X_test_df.copy()
 
@@ -174,7 +175,7 @@ y_pred2 = y_pred2.T
 df_pred = pd.DataFrame(y_pred2, columns=['ID','TARGET'])
 
 #path where to save your csv file
-df_pred.to_csv('/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/submission_reg_impacts.csv', sep=';', index = False)
+df_pred.to_csv('./dataframes/submission_reg_impacts.csv', sep=';', index = False)
 
-
+print("Done, target file saved in ./dataframes/target_reg_impacts.csv")
 
