@@ -49,7 +49,7 @@ def expression_p_svr(df):
     #Prediction
     y_pred = reg.predict(X_test)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return y_pred, y_test
+    return reg, y_pred, y_test
 
 def expression_p_linear(df): 
     
@@ -64,7 +64,7 @@ def expression_p_linear(df):
     #Prediction
     y_pred = reg.predict(X_test)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return y_pred, y_test
+    return reg, y_pred, y_test
     
 def expression_n_svr(df): 
     
@@ -79,7 +79,7 @@ def expression_n_svr(df):
     #Prediction
     y_pred = reg.predict(X_test)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return y_pred, y_test
+    return reg, y_pred, y_test
 
 def expression_n_linear(df): 
     
@@ -94,7 +94,7 @@ def expression_n_linear(df):
     #Prediction
     y_pred = reg.predict(X_test)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return y_pred, y_test
+    return reg, y_pred, y_test
     
 """
 Classification Model for expression impacts
@@ -122,7 +122,7 @@ def expression_p_svc(df):
     y_pred_clf = pd.DataFrame(y_pred).replace(labels, classes)
     y_test_clf = pd.DataFrame(y_test).replace(labels, classes)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_test_clf), np.array(y_pred_clf)))
-    return y_pred, y_test
+    return clf, y_pred, y_test
 
 """ 
 Sharpness Impact 
@@ -145,14 +145,14 @@ def sharpness_svr(X_scale, Y):
     
     X_train, X_test, y_train, y_test = train_test_split(X_scale, Y, train_size=0.8, random_state=0)
     
-    #reg = SVR(kernel='rbf', C=0.8, gamma=0.1)
-    reg = LinearRegression()
+    reg = SVR(kernel='rbf', C=0.8, gamma=0.1)
+    #reg = LinearRegression()
     reg.fit(X_train, y_train)
 
     #Prediction
     y_pred = reg.predict(X_test)
     print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
-    return y_pred, y_test
+    return reg, y_pred, y_test
 
 
 
