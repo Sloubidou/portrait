@@ -156,7 +156,7 @@ def sharpness_svr(X_scale, Y):
  
     
 """ 
-Background Impact 
+Background and Exposure Impacts
 """ 
     
 def background(X_scale, Y):

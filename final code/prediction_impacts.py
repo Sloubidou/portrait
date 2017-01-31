@@ -66,7 +66,8 @@ Y_n_train = np.array(df_train['sharpness_impact_n'])
 reg_sharp_n, a,b = mi.sharpness_svr(X_scale_train, Y_n_train)
 y_pred_sharp_n = reg_sharp_n.predict(X_scale_test)
 
-"background impact"
+"background impact and Exposure"
+"Same Model"
 
 X_scale_train = preprocessing.scale(
                 np.array(
@@ -76,15 +77,29 @@ X_scale_test = preprocessing.scale(
                 np.array(
                     df_extract_test[df_extract_test.columns[2:]]))
 
-#Positive
+#Positive background
 Y_p_train = np.array(df_train['background_impact_p'])
 reg_back_p, a,b = mi.background(X_scale_train, Y_p_train)
 y_pred_back_p = reg_back_p.predict(X_scale_test)
 
-#Negative
+#Negative background
 Y_n_train = np.array(df_train['background_impact_n'])
 reg_back_n, a,b = mi.background(X_scale_train, Y_n_train)
 y_pred_back_n = reg_back_n.predict(X_scale_test)
 
+#Positive Exposure
+Y_p_train = np.array(df_train['exposure_impact_p'])
+reg_expo_p, a,b = mi.background(X_scale_train, Y_p_train)
+y_pred_expo_p = reg_expo_p.predict(X_scale_test)
+
+#Negative Exposure
+Y_n_train = np.array(df_train['exposure_impact_n'])
+reg_expo_n, a,b = mi.background(X_scale_train, Y_n_train)
+y_pred_expo_n = reg_expo_n.predict(X_scale_test)
+
+
+"Results"
+#y_pred_expo_n , y_pred_expo_p, y_pred_back_n , y_pred_back_p
+# y_pred_sharp_n, y_pred_sharp_p, y_pred_exp_n, y_pred_exp_p
 
 
