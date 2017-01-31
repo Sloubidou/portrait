@@ -11,13 +11,12 @@ from sklearn import preprocessing
 import pdb
 
 
-pathname1 = "/Users/paulinenicolas/portrait/df_modif.csv"
+pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
 pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
-
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
-
-
+X_df = X_df.sort('ID')
+X_df
 #Rate (1 to 24) 
 y_df = pd.read_csv( pathname2, sep = ';')
 
@@ -25,7 +24,7 @@ y_df = pd.read_csv( pathname2, sep = ';')
 labels = np.array(['0', '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'])
 
 
-class FeatureExtractorClf(object):
+class FeatureExtractorReg(object):
     def __init__(self):
 
         pass
@@ -42,8 +41,7 @@ class FeatureExtractorClf(object):
         #XX = XX.select_dtypes(include=['float64', 'int'])
         XX = np.array(XX)
         # mean = 0 ; standard deviation = 1.0
-        scaler = preprocessing.StandardScaler()
-        XX = scaler.fit_transform(XX)
+        XX = preprocessing.scale(XX)
         
         #Transforming the actual target into a binary target
         yy = y_df.copy()
@@ -61,26 +59,27 @@ class FeatureExtractorClf(object):
     
 #Fitting model function (SVM)
 from sklearn.neighbors import NearestNeighbors
-from sklearn.svm import SVC
+from sklearn.svm import SVR
 from sklearn.base import BaseEstimator
 from sklearn.pipeline import Pipeline
 from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
 
 
-class Classifier(BaseEstimator):
+class Regressor(BaseEstimator):
     def __init__(self, C):
         self.n_components = 10
         self.C = C
-        self.clf = SVC(C = self.C, probability = False) 
+        self.reg = SVR( C = self.C)
 
     def fit(self, X, y):
-        self.clf.fit(X, y)
+        self.reg.fit(X, y)
 
     def predict(self, X):
         return self.clf.predict(X)
 
     def predict_proba(self, X):
-        return self.clf.predict_proba(X)    
+        return self.reg.predict_proba(X)    
         
 #Train Test model 
 
@@ -91,7 +90,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
 skf_is = list(skf.split(X_df))[0]
 
-def train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, Classifier):
+def train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, Regressor):
     train_is, test_is = skf_is
     X_train_df = X_df.iloc[train_is].copy()                                  
     y_train_df = y_df.iloc[train_is].copy()
@@ -99,22 +98,22 @@ def train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, Classifier):
     y_test_df = y_df.iloc[test_is].copy() 
 
     # Feature extraction
-    fe_clf = FeatureExtractor
-    fe_clf.fit(X_train_df, y_train_df)
-    X_train_array_clf, y_train_array_clf = fe_clf.transform(X_train_df, y_train_df)
-    X_test_array_clf, y_test_array_clf = fe_clf.transform(X_test_df, y_test_df)
+    fe_reg = FeatureExtractor
+    fe_reg.fit(X_train_df, y_train_df)
+    X_train_array_reg, y_train_array_reg = fe_reg.transform(X_train_df, y_train_df)
+    X_test_array_reg, y_test_array_reg = fe_reg.transform(X_test_df, y_test_df)
 
    
     # Train
-    clf = Classifier
-    clf.fit(X_train_array_clf, y_train_array_clf)
+    reg = Regressor
+    reg.fit(X_train_array_reg, y_train_array_reg)
     
     # Test          
     #y_proba_clf = clf.predict_proba(X_test_array_clf)                        
     #y_pred_clf = labels[np.argmax(y_proba_clf, axis=1)] 
-    y_pred_clf = clf.predict(X_test_array_clf)                     
-    accuracy = spearman_error(y_test_array_clf, y_pred_clf)      
-    print(y_pred_clf[:10], y_test_array_clf[:10])                                   
+    y_pred_reg = reg.predict(X_test_array_reg).astype(int)                
+    accuracy = spearman_error(y_test_array_reg, y_pred_reg)      
+    print(y_pred_reg[:10], y_test_array_reg[:10])                                   
     return accuracy
 
 #Definition of the error :
@@ -130,19 +129,18 @@ def spearman_error(y_true, y_pred):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-C = [10, 100, 1000]
+C = [1,10, 100]
  
  
 accuracies = []
  
 for i in range(len(C)):
      
-    reg = Classifier(C[i])
-    FeatureExtractor = FeatureExtractorClf()
+    reg = Regressor(C[i])
+    FeatureExtractor = FeatureExtractorReg()
     skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
     skf_is = list(skf.split(X_df))[0]
  
-    accuracies.append(train_test_model_clf(X_df, y_df, skf_is, FeatureExtractor, reg))
+    accuracies.append(train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg))
      
 print(accuracies)
-
