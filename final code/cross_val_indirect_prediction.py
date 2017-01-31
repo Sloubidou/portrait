@@ -133,7 +133,7 @@ def spearman_error(y_true, y_pred):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-C = [1,10, 100]
+C = [1]
  
  
 accuracies = []
@@ -148,3 +148,6 @@ for i in range(len(C)):
     accuracies.append(train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg))
      
 print(accuracies)
+
+
+
