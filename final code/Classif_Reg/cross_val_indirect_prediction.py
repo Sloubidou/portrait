@@ -19,7 +19,7 @@ from sklearn import preprocessing
 
 
 
-pathname1 = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/essai_impact.csv"
+pathname1 = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/essai_impact_train.csv"
 pathname2 = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
@@ -148,6 +148,33 @@ for i in range(len(C)):
     accuracies.append(train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg))
      
 print(accuracies)
+
+###True prediction a la fin du fichier de cross val
+
+#path until feature matrix of testing set
+
+pathname_result = "/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/essai_impact_test.csv"
+X_test_df = pd.read_csv(pathname_result, sep = ',')
+X_test = X_test_df.copy()
+
+#Feature extraction (perhaps need to be changed)
+X_test = X_test.set_index(['ID'])
+X_test = X_test.drop(['Unnamed: 0'], axis=1)
+X_test = np.array(X_test)
+#X_test = preprocessing.scale(X_test)
+
+y_pred = reg.predict(X_test).astype(int)
+id = np.arange(10001, 13001)
+id.reshape(-1,1)
+
+y_pred2 = np.vstack((id, y_pred))
+y_pred2 = y_pred2.T
+
+
+df_pred = pd.DataFrame(y_pred2, columns=['ID','TARGET'])
+
+#path where to save your csv file
+df_pred.to_csv('/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframes/submission_reg_impacts.csv', sep=';', index = False)
 
 
 
