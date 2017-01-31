@@ -120,4 +120,4 @@ df['ID'] = df.index
 
 #os.getcwd() is portrait
 
-df.to_csv(os.getcwd()+str('/dataframes/result_deep.csv'), sep=';', index = False)
+df.to_csv(os.getcwd()+str('/dataframes/submission_nn.csv'), sep=';', index = False)
