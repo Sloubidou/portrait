@@ -13,9 +13,10 @@ from sklearn import preprocessing
 
 """ Getting the data  """
 
-path_train = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/facial_features_train.csv'
+path_train = '/home/slou/Documents/M2/semestre1/ML_project/facial_features_train.csv'
 path_test = ''
-path_dataframe_train = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframe.csv'
+#path_dataframe_train = '/Users/domitillecoulomb/Documents/DATA_SCIENCE/MachineLearning/Projet/portrait/dataframe.csv'
+path_dataframe_train = '/home/slou/Documents/M2/semestre1/ML_project/portrait/dataframes/dataframe.csv'
 path_dataframe_test = ''
 
 #Facial Features
@@ -28,6 +29,18 @@ df_extract_train = df_extract_train.sort('ID')
 
 df_extract_test = pd.read_csv(path_dataframe_test)
 df_extract_test = df_extract_test.sort('ID')
+
+"position impact"
+
+
+# Positive
+reg_exp_p, a,b = mi.expression_p_svr(df_train)
+y_pred_exp_p = reg_exp_p.predict(X_test)
+
+#Negative
+reg_exp_n, a,b = mi.expression_n_svr(df_train)
+y_pred_exp_n = reg_exp_n.predict(X_test)
+
 
 "expression impact"
 
