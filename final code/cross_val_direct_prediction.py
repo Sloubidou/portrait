@@ -112,14 +112,14 @@ def train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, Regressor):
     #y_proba_clf = clf.predict_proba(X_test_array_clf)                        
     #y_pred_clf = labels[np.argmax(y_proba_clf, axis=1)] 
     y_pred_reg = reg.predict(X_test_array_reg).astype(int)                
-    accuracy = spearman_error(y_test_array_reg, y_pred_reg)      
-    print(y_pred_reg[:10], y_test_array_reg[:10])                                   
+    accuracy = spearman_correlation(y_test_array_reg, y_pred_reg)      
+    #print(y_pred_reg[:10], y_test_array_reg[:10])                                   
     return accuracy
 
 #Definition of the error :
 from scipy.stats import rankdata
     
-def spearman_error(y_true, y_pred):
+def spearman_correlation(y_true, y_pred):
     y_true_rank = rankdata(y_true)
     y_pred_rank = rankdata(y_pred)
     square_distance = np.dot((y_pred_rank - y_true_rank).T, (y_pred_rank - y_true_rank))
@@ -129,7 +129,7 @@ def spearman_error(y_true, y_pred):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-C = [1,10, 100]
+C = [1, 10, 100]
  
  
 accuracies = []
@@ -140,7 +140,8 @@ for i in range(len(C)):
     FeatureExtractor = FeatureExtractorReg()
     skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
     skf_is = list(skf.split(X_df))[0]
- 
-    accuracies.append(train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg))
-     
-print(accuracies)
+    acc = train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg)
+    print('for C = ', C[i], ' spearman correlation = ', acc)
+    accuracies.append(acc)
+
+
