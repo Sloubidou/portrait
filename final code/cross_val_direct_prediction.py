@@ -11,8 +11,11 @@ from sklearn import preprocessing
 import pdb
 
 
-pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
-pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+#pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
+#pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+
+pathname1="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/portrait/dataframes/dataframe.csv"
+pathname2="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_de_sortie_dentrainement_predire_le_score_esthetique_dun_portrait.csv"
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
 X_df = X_df.sort('ID')
@@ -70,7 +73,8 @@ class Regressor(BaseEstimator):
     def __init__(self, C):
         self.n_components = 10
         self.C = C
-        self.reg = SVR( C = self.C)
+        #self.reg = SVR( C = self.C)
+        self.reg = LogisticRegression( penalty ='l1',C= self.C)
 
     def fit(self, X, y):
         self.reg.fit(X, y)
@@ -129,7 +133,7 @@ def spearman_error(y_true, y_pred):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-C = [1,10, 100]
+C = [0.0001,0.001]
  
  
 accuracies = []
