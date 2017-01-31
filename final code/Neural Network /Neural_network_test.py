@@ -6,9 +6,9 @@ Created on Mon Jan 30 15:48:06 2017
 @author: paulinenicolas
 """
 # We could not upload the folders with the images on Git because it is to heavy. We let here the ends of the paths
-pathname = "../challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/*.jpg"
-pathresult =  "../challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
-path_test = "/../challenge_testing_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_test/*.jpg"
+pathname = "./pictures_train/*.jpg"
+pathresult =  ".dataframes/output_train.csv"
+path_test = "./pictures_test/*.jpg"
 
 from keras.models import Model
 from keras.layers import Input, Convolution2D, ZeroPadding2D, MaxPooling2D, Flatten, Dropout, Activation
@@ -75,7 +75,7 @@ def vgg_face(weights_path=None):
     return model
 
 
-model = vgg_face('/Users/paulinenicolas/downloads/mymodel_4000pic_3epoch.h5')
+model = vgg_face('./final\ code/Neural\ Network/mymodel_500pic_2epoch.h5')
 
 
 ###Building matrix of features###
@@ -113,7 +113,6 @@ id.reshape(-1,1)
 y_pred3 = np.vstack((id, y_pred2))
 y_pred3 = y_pred3.T
 
-np.save('/Users/paulinenicolas/Downloads/array_test_deep', im_tot_test)
 
 df = pd.DataFrame(y_pred3, columns=['ID','TARGET'])
 df['ID'] = df.index
@@ -121,3 +120,4 @@ df['ID'] = df.index
 #os.getcwd() is portrait
 
 df.to_csv(os.getcwd()+str('/dataframes/submission_nn.csv'), sep=';', index = False)
+print('dataframe saved in /dataframes/submission_nn.csv')

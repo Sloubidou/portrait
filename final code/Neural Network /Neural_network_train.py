@@ -5,10 +5,12 @@ Created on Sat Jan 28 12:26:19 2017
 
 @author: paulinenicolas
 """
+
+## Befor Running, need to upload vgg-face-keras.h5 at https://gist.github.com/EncodeTS/6bbe8cb8bebad7a672f0d872561782d9
 # We could not upload the folders with the images on Git because it is to heavy. We let here the ends of the paths
-pathname = "../challenge_training_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_train/*.jpg"
-pathresult =  "../challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
-path_test = "/../challenge_testing_input_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis/pictures_test/*.jpg"
+pathname = "./pictures_train/*.jpg"
+pathresult =  "./dataframs/output_train.csv"
+path_test = "./pictures_test/*.jpg"
 
 from keras.models import Model
 from keras.layers import Input, Convolution2D, ZeroPadding2D, MaxPooling2D, Flatten, Dropout, Activation
@@ -88,7 +90,7 @@ def vgg_face(weights_path=None):
     return model
 
 #Fit the mode with a pre-trianed model https://gist.github.com/EncodeTS/6bbe8cb8bebad7a672f0d872561782d9
-model = vgg_face('/Users/paulinenicolas/Downloads/vgg-face-keras.h5')
+model = vgg_face('./vgg-face-keras.h5')
 
 
 #Function used to get the image sorted numerically
@@ -157,10 +159,12 @@ model.compile(optimizer='adagrad',
               loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 #Fitting to the training set
+Print('Fitting the model...')
 model.fit(X_train, y_train, nb_epoch=2, batch_size=32, validation_data=(X_test, y_test))
 
+Print('Saving weights...')
 #Saving the weights after training phase
-model.save_weights('mymodel_500pic_2epoch.h5')
+model.save_weights('./final\ code/Neural\ Network/mymodel_500pic_2epoch.h5')
 
 #### Prediction ####
 
@@ -210,8 +214,8 @@ def spearman_error(y_true, y_pred):
     return accuracy
 
 #Checking how the code went
-print(spearman_error(y_true, y_pred2))
-print(y_true[60:70])
-print(y_pred2[60:70])
+print('spearman coorelation =',spearman_error(y_true, y_pred2))
+print('y true :', y_true[60:70])
+print('y pred :',y_pred2[60:70])
 
 
