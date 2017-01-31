@@ -12,25 +12,46 @@ from sklearn.cross_validation import train_test_split
 from sklearn.svm import SVR, SVC
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from sklearn.ensemble import RandomForestRegressor
 
 
 """ Position Impact """
 
-def position_impact(x_selection_position, y_position_impact):
-    print("Calcul de position_impact :")
-    X_train, X_test, y_train, y_test = train_test_split(x_selection_position, y_position_impact, train_size=0.8, random_state=0)
-    print("Nb d'échantillons d'apprentissage :  {}".format(X_train.shape[0]))
-    print("Nb d'échantillons de validation :    {}".format(X_test.shape[0]))
-
-    svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
-                   
-    svr_rbf.fit(X_train, y_train)
-    y_pred = svr_rbf.predict(X_test)
+def position_impact(X_train, y_train):
     
-    #mesure standard de performance
-    from sklearn.metrics import mean_squared_error
-    print("Accuracy       : ", mean_squared_error(y_test, y_pred))
-    return y_pred
+    
+    reg = RandomForestRegressor(random_state=0, n_estimators=1000)
+    reg.fit(X_train, y_train)
+    
+    y_pred = reg.predict(X_train)    
+    print("Mean Squared error: {}", mean_squared_error(y_train, y_pred))
+    
+    return reg, y_pred
+
+
+""" Angle Impact """
+def angle_features(df):
+    x_angle = df.ix[:,'pan angle':'roll angle']
+
+    x_angle['middle_x'] = (df['x0'] + df['width'])/2
+    x_angle['middle_y'] = (df['y0'] + df['height'])/2
+    x_angle['nose_tip_x'] = df['nose_tip_x']
+    x_angle['nose_tip_y'] = df['nose_tip_y']
+    x_angle['nose_left_eye_dist'] = abs(df['nose_tip_x'] - df['left_eye_pupil_x'])
+    x_angle['nose_right_eye_dist'] = abs(df['nose_tip_x'] - df['right_eye_pupil_x'])
+    x_angle['mouth_eye'] = abs(df['mouth_center_x'] - df['midpoint_between_eyes_x'])
+    
+    return x_angle
+    
+def angle_impact(X_train, y_train):
+    
+    reg = RandomForestRegressor(random_state=0, n_estimators=1000)
+    reg.fit(X_train, y_train)
+    
+    y_pred = reg.predict(X_train)    
+    print("Mean Squared error: {}", mean_squared_error(y_train, y_pred))
+    
+    return reg, y_pred
 
 """
 Regression Model for expression impacts
@@ -40,66 +61,35 @@ def expression_p_svr(df):
     
     "SVR - Best Result"
     
-    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression impact_p'], train_size=0.8, random_state=0)
-    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
+    X_train = df[df.columns[6:75].append(df.columns[84:94])]
+    y_train = df['expression impact_p']
 
     reg = SVR(kernel='poly', C=0.8, gamma=0.1)
     reg.fit(X_train, y_train)
-
     #Prediction
-    y_pred = reg.predict(X_test)
-    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return reg, y_pred, y_test
+    y_pred_train = reg.predict(X_train)
+    print("Mean Squared error: {}", mean_squared_error(np.array(y_train), np.array(y_pred_train)))
+    return reg, y_pred_train
 
-def expression_p_linear(df): 
-    
-    "SVR - Best Result"
-    
-    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression impact_p'], train_size=0.8, random_state=0)
-    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
-
-    reg = LinearRegression()
-    reg.fit(X_train, y_train)
-
-    #Prediction
-    y_pred = reg.predict(X_test)
-    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return reg, y_pred, y_test
     
 def expression_n_svr(df): 
     
     "SVR - Best Result"
     
-    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression_impact_n'], train_size=0.8, random_state=0)
-    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
+    X_train = df[df.columns[6:75].append(df.columns[84:94])]
+    y_train = df['expression_impact_n']
 
     reg = SVR(kernel='poly', C=0.8, gamma=0.1)
     reg.fit(X_train, y_train)
-
     #Prediction
-    y_pred = reg.predict(X_test)
-    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return reg, y_pred, y_test
+    y_pred_train = reg.predict(X_train)
+    print("Mean Squared error: {}", mean_squared_error(np.array(y_train), np.array(y_pred_train)))
+    return reg, y_pred_train
 
-def expression_n_linear(df): 
-    
-    "SVR - Best Result"
-    
-    X_train, X_test, y_train, y_test = train_test_split(df[df.columns[6:75].append(df.columns[84:94])], df['expression_impact_n'], train_size=0.8, random_state=0)
-    X_train, X_test, y_train, y_test = np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
-
-    reg = LinearRegression()
-    reg.fit(X_train, y_train)
-
-    #Prediction
-    y_pred = reg.predict(X_test)
-    print("Mean Squared error: {}", mean_squared_error(np.array(y_test), np.array(y_pred)))
-    return reg, y_pred, y_test
     
 """
 Classification Model for expression impacts
 """
-
 
 def expression_p_svc(df):
     
@@ -143,16 +133,15 @@ Sharpness Impact
 
 def sharpness_svr(X_scale, Y):
     
-    X_train, X_test, y_train, y_test = train_test_split(X_scale, Y, train_size=0.8, random_state=0)
     
     reg = SVR(kernel='rbf', C=0.8, gamma=0.1)
     #reg = LinearRegression()
-    reg.fit(X_train, y_train)
+    reg.fit(X_scale, Y)
 
     #Prediction
-    y_pred = reg.predict(X_test)
-    print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
-    return reg, y_pred, y_test
+    y_train_pred = reg.predict(X_scale)
+    print("Mean Squared error: {}", mean_squared_error(Y, y_train_pred))
+    return reg, y_train_pred, Y
  
     
 """ 
@@ -160,18 +149,15 @@ Background and Exposure Impacts
 """ 
     
 def background(X_scale, Y):
-    X_train, X_test, y_train, y_test = train_test_split(X_scale, Y, train_size=0.8, random_state=0)
     
     reg = SVR(kernel='rbf', C=0.8, gamma=0.1)
-
-    reg.fit(X_train, y_train)
+    reg.fit(X_scale, Y)
 
     #Prediction
-    y_pred = reg.predict(X_test)
-    print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
+    y_train_pred = reg.predict(X_scale)
+    print("Mean Squared error: {}", mean_squared_error(Y, y_train_pred))
   
     
-    return reg, y_pred, y_test
-
+    return reg, y_train_pred, Y
 
 
