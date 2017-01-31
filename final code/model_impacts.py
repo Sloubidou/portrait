@@ -17,30 +17,41 @@ from sklearn.ensemble import RandomForestRegressor
 
 """ Position Impact """
 
-def position_impact(df):
+def position_impact(X_train, y_train):
     
     
     reg = RandomForestRegressor(random_state=0, n_estimators=1000)
     reg.fit(X_train, y_train)
     
-    y_pred = reg.predict(X_test)    
-    print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
+    y_pred = reg.predict(X_train)    
+    print("Mean Squared error: {}", mean_squared_error(y_train, y_pred))
     
-    return reg, y_pred, y_test
+    return reg, y_pred
 
 
 """ Angle Impact """
+def angle_features(df):
+    x_angle = df.ix[:,'pan angle':'roll angle']
 
-def angle_impact(df):
-    X_train, X_test, y_train, y_test = train_test_split(X_scale, Y, train_size=0.8, random_state=0)
+    x_angle['middle_x'] = (df['x0'] + df['width'])/2
+    x_angle['middle_y'] = (df['y0'] + df['height'])/2
+    x_angle['nose_tip_x'] = df['nose_tip_x']
+    x_angle['nose_tip_y'] = df['nose_tip_y']
+    x_angle['nose_left_eye_dist'] = abs(df['nose_tip_x'] - df['left_eye_pupil_x'])
+    x_angle['nose_right_eye_dist'] = abs(df['nose_tip_x'] - df['right_eye_pupil_x'])
+    x_angle['mouth_eye'] = abs(df['mouth_center_x'] - df['midpoint_between_eyes_x'])
+    
+    return x_angle
+    
+def angle_impact(X_train, y_train):
     
     reg = RandomForestRegressor(random_state=0, n_estimators=1000)
     reg.fit(X_train, y_train)
     
-    y_pred = reg.predict(X_test)    
-    print("Mean Squared error: {}", mean_squared_error(y_test, y_pred))
+    y_pred = reg.predict(X_train)    
+    print("Mean Squared error: {}", mean_squared_error(y_train, y_pred))
     
-    return reg, y_pred, y_test
+    return reg, y_pred
 
 """
 Regression Model for expression impacts
@@ -58,7 +69,7 @@ def expression_p_svr(df):
     #Prediction
     y_pred_train = reg.predict(X_train)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_train), np.array(y_pred_train)))
-    return reg, y_pred_train, y_train
+    return reg, y_pred_train
 
     
 def expression_n_svr(df): 
@@ -66,14 +77,14 @@ def expression_n_svr(df):
     "SVR - Best Result"
     
     X_train = df[df.columns[6:75].append(df.columns[84:94])]
-    y_train = df['expression impact_n']
+    y_train = df['expression_impact_n']
 
     reg = SVR(kernel='poly', C=0.8, gamma=0.1)
     reg.fit(X_train, y_train)
     #Prediction
     y_pred_train = reg.predict(X_train)
     print("Mean Squared error: {}", mean_squared_error(np.array(y_train), np.array(y_pred_train)))
-    return reg, y_pred_train, y_train
+    return reg, y_pred_train
 
     
 """
