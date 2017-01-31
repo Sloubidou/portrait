@@ -8,14 +8,13 @@ Created on Tue Jan 17 12:56:14 2017
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
-import pdb
 
 
 #pathname for the feature extractor dataframe of the trianong set
-pathname1 = "./dataframes/dataframe.csv"
+pathname1 = "./dataframes/dataframe_train.csv"
 
 #pathname of the target of the training set
-pathname2 = "./input_data_available/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+pathname2 = "./dataframes/output_train.csv"
 
 
 #Features Data
@@ -60,20 +59,15 @@ class FeatureExtractorReg(object):
 
     
 #Fitting model function (SVM)
-from sklearn.neighbors import NearestNeighbors
 from sklearn.svm import SVR
 from sklearn.base import BaseEstimator
-from sklearn.pipeline import Pipeline
-from sklearn.decomposition import PCA
-from sklearn.linear_model import LogisticRegression
 
 
 class Regressor(BaseEstimator):
     def __init__(self, C):
-        self.n_components = 10
         self.C = C
         #self.reg = SVR( C = self.C)
-        self.reg = LogisticRegression( penalty ='l1',C= self.C)
+        self.reg = SVR(C= self.C)
 
     def fit(self, X, y):
         self.reg.fit(X, y)
@@ -180,5 +174,5 @@ df_pred = pd.DataFrame(y_pred2, columns=['ID','TARGET'])
 
 #path where to save your csv file
 df_pred.to_csv('./dataframes/target_test_svm.csv', sep=';', index = False)
-print("Done")
+print("Done, target file saved in ./dataframes/target_test_svm.csv")
 
