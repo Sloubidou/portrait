@@ -76,7 +76,7 @@ class Regressor(BaseEstimator):
         self.reg.fit(X, y)
 
     def predict(self, X):
-        return self.clf.predict(X)
+        return self.reg.predict(X)
 
     def predict_proba(self, X):
         return self.reg.predict_proba(X)    
