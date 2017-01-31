@@ -10,20 +10,20 @@ import numpy as np
 from sklearn import preprocessing
 import pdb
 
-
+#pathname for the feature extractor dataframe of the trianong set
 pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
+
+#pathname of the target of the training set
 pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
 X_df = X_df.sort('ID')
 X_df
+
 #Rate (1 to 24) 
 y_df = pd.read_csv( pathname2, sep = ';')
 
 #Feature extractor function (only selecting the impact function)
-labels = np.array(['0', '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'])
-
-
 class FeatureExtractorReg(object):
     def __init__(self):
 
