@@ -19,6 +19,7 @@ from keras.optimizers import SGD
 import cv2, numpy as np
 import glob
 import pandas as pd
+import os
 nb_classes = 24
 
 def vgg_face(weights_path=None):
@@ -159,10 +160,10 @@ model.compile(optimizer='adagrad',
               loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 #Fitting to the training set
-Print('Fitting the model...')
+print('Fitting the model...')
 model.fit(X_train, y_train, nb_epoch=2, batch_size=32, validation_data=(X_test, y_test))
 
-Print('Saving weights...')
+print('Saving weights...')
 #Saving the weights after training phase
 model.save_weights('./final\ code/Neural\ Network/mymodel_500pic_2epoch.h5')
 
