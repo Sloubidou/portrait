@@ -11,12 +11,12 @@ from sklearn import preprocessing
 import pdb
 
 
+#pathname for the feature extractor dataframe of the trianong set
+pathname1 = "./dataframes/dataframe.csv"
 
-#pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
-#pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+#pathname of the target of the training set
+pathname2 = "./input_data_available/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
 
-pathname1="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/portrait/dataframes/dataframe.csv"
-pathname2="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_de_sortie_dentrainement_predire_le_score_esthetique_dun_portrait.csv"
 
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
@@ -29,7 +29,6 @@ y_df = pd.read_csv( pathname2, sep = ';')
 #Feature extractor function (only selecting the impact function)
 class FeatureExtractorReg(object):
     def __init__(self):
-
         pass
 
     def fit(self, X_df, y_df):
@@ -137,6 +136,7 @@ def spearman_correlation(y_true, y_pred):
 C = [1, 10, 100]
  
 accuracies = []
+print("Cross Validation on SVR to chose the hyperparameter")
  
 for i in range(len(C)):
      
@@ -148,4 +148,37 @@ for i in range(len(C)):
     print('for C = ', C[i], ' spearman correlation = ', acc)
     accuracies.append(acc)
 
+
+
+###True prediction a la fin du fichier de cross val
+print("Calculating target for testing set for SVR with C=10..")
+reg = Regressor(10)
+FeatureExtractor = FeatureExtractorReg()
+skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
+skf_is = list(skf.split(X_df))[0]
+acc = train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg)
+#path until feature matrix of testing set
+pathname_result = "./dataframes/dataframe_test.csv"
+X_test_df = pd.read_csv(pathname_result, sep = ',')
+X_test = X_test_df.copy()
+
+#Feature extraction (perhaps need to be changed)
+X_test = X_test.set_index(['ID'])
+X_test = X_test.drop(['Unnamed: 0'], axis=1)
+X_test = np.array(X_test)
+X_test = preprocessing.scale(X_test)
+
+y_pred = reg.predict(X_test).astype(int)
+id = np.arange(10001, 13001)
+id.reshape(-1,1)
+
+y_pred2 = np.vstack((id, y_pred))
+y_pred2 = y_pred2.T
+
+
+df_pred = pd.DataFrame(y_pred2, columns=['ID','TARGET'])
+
+#path where to save your csv file
+df_pred.to_csv('./dataframes/target_test_svm.csv', sep=';', index = False)
+print("Done")
 
