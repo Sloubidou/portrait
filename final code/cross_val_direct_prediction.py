@@ -11,19 +11,22 @@ from sklearn import preprocessing
 import pdb
 
 
-pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
-pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+
+#pathname1 = "/Users/paulinenicolas/portrait/dataframes/dataframe.csv"
+#pathname2 = "/Users/paulinenicolas/Documents/M2_Data_Science/ML_From_Theory_To_Practice/Project_ML/challenge_output_data_training_file_predict_the_aesthetic_score_of_a_portrait_by_combining_photo_analysis_and_facial_attributes_analysis.csv"
+
+pathname1="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/portrait/dataframes/dataframe.csv"
+pathname2="/Users/estelleaflalo/Desktop/M2_Data_Science/First_Period/Machine_Learning_from_Theory_to_Practice/Project/challenge_fichier_de_sortie_dentrainement_predire_le_score_esthetique_dun_portrait.csv"
+
 #Features Data
 X_df = pd.read_csv( pathname1, sep = ',')
 X_df = X_df.sort('ID')
 X_df
+
 #Rate (1 to 24) 
 y_df = pd.read_csv( pathname2, sep = ';')
 
 #Feature extractor function (only selecting the impact function)
-labels = np.array(['0', '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'])
-
-
 class FeatureExtractorReg(object):
     def __init__(self):
 
@@ -70,7 +73,8 @@ class Regressor(BaseEstimator):
     def __init__(self, C):
         self.n_components = 10
         self.C = C
-        self.reg = SVR( C = self.C)
+        #self.reg = SVR( C = self.C)
+        self.reg = LogisticRegression( penalty ='l1',C= self.C)
 
     def fit(self, X, y):
         self.reg.fit(X, y)
@@ -112,14 +116,14 @@ def train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, Regressor):
     #y_proba_clf = clf.predict_proba(X_test_array_clf)                        
     #y_pred_clf = labels[np.argmax(y_proba_clf, axis=1)] 
     y_pred_reg = reg.predict(X_test_array_reg).astype(int)                
-    accuracy = spearman_error(y_test_array_reg, y_pred_reg)      
-    print(y_pred_reg[:10], y_test_array_reg[:10])                                   
+    accuracy = spearman_correlation(y_test_array_reg, y_pred_reg)      
+    #print(y_pred_reg[:10], y_test_array_reg[:10])                                   
     return accuracy
 
 #Definition of the error :
 from scipy.stats import rankdata
     
-def spearman_error(y_true, y_pred):
+def spearman_correlation(y_true, y_pred):
     y_true_rank = rankdata(y_true)
     y_pred_rank = rankdata(y_pred)
     square_distance = np.dot((y_pred_rank - y_true_rank).T, (y_pred_rank - y_true_rank))
@@ -129,8 +133,8 @@ def spearman_error(y_true, y_pred):
 
     
 #Cross Validation in order to find  the value of C which predict the best   
-C = [1,10, 100]
- 
+
+C = [1, 10, 100]
  
 accuracies = []
  
@@ -140,7 +144,8 @@ for i in range(len(C)):
     FeatureExtractor = FeatureExtractorReg()
     skf = ShuffleSplit(n_splits=2, test_size=0.2, random_state=57)  
     skf_is = list(skf.split(X_df))[0]
- 
-    accuracies.append(train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg))
-     
-print(accuracies)
+    acc = train_test_model_reg(X_df, y_df, skf_is, FeatureExtractor, reg)
+    print('for C = ', C[i], ' spearman correlation = ', acc)
+    accuracies.append(acc)
+
+
