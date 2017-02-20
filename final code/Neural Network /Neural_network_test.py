@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 30 15:48:06 2017
 
-@author: paulinenicolas
-"""
 # We could not upload the folders with the images on Git because it is to heavy. We let here the ends of the paths
 pathname = "./pictures_train/*.jpg"
 pathresult =  ".dataframes/output_train.csv"

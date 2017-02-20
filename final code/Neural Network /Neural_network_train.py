@@ -3,7 +3,7 @@
 """
 Created on Sat Jan 28 12:26:19 2017
 
-@author: paulinenicolas
+
 """
 
 ## Befor Running, need to upload vgg-face-keras.h5 at https://gist.github.com/EncodeTS/6bbe8cb8bebad7a672f0d872561782d9
